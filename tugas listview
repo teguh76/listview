@@ -1,0 +1,70 @@
+package com.example.listview
+
+import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import kotlinx.android.synthetic.main.activity_main.*
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        //mencari listview
+        var listView = findViewById<ListView>(R.id.listview)
+
+        var customAdapter = CustomAdapter(this)
+        listView.adapter=customAdapter
+
+        //mengeset click listener
+        listView.setOnItemClickListener { adapterView, view, position, id ->
+            Toast.makeText(applicationContext,"Dia adalah Presiden "+customAdapter.presiden[position],Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+
+class CustomAdapter(private val context:Activity) : BaseAdapter() {
+    //Array nama Presiden
+    var presiden = arrayOf("Soekarno", "Soeharto", "B. J. Habibie", "Abdurrahman Wahid", "Megawati Soekarnoputri", "Susilo Bambang Yudhoyono", "Joko Widodo")
+    //Array Presiden desc
+    var desc = arrayOf("Dr. Ir. H. Soekarno adalah Presiden pertama RI yang menjabat pada periode 1945–1967.", "Jenderal Besar TNI H. M. Soeharto, adalah Presiden kedua Indonesia yang menjabat dari tahun 1967 sampai 1998, menggantikan Soekarno", "Prof. Dr. Ing. H. Bacharuddin Jusuf Habibie, FREng adalah Presiden Republik Indonesia yang ketiga. Sebelumnya, B.J. Habibie menjabat sebagai Wakil Presiden Republik Indonesia ke-7", "Dr. K. H. Abdurrahman Wahid atau yang akrab disapa Gus Dur adalah Presiden Indonesia yang keempat dari tahun 1999 hingga 2001", "Dr. Hj. Dyah Permata Megawati Setyawati Soekarnoputri atau umumnya lebih dikenal sebagai Megawati Soekarnoputri adalah Presiden Indonesia yang kelima", "Jenderal TNI Prof. Dr. H. Susilo Bambang Yudhoyono, M.A., GCB., AC. adalah Presiden Indonesia ke-6 yang menjabat sejak 20 Oktober 2004 hingga 20 Oktober 2014", "Ir. H. Joko Widodo atau Jokowi adalah Presiden ke-7 Indonesia yang mulai menjabat sejak 20 Oktober 2014")
+
+    //Array foto presiden
+    var image = intArrayOf(R.mipmap.soekarno, R.mipmap.suharto, R.mipmap.habibie, R.mipmap.gusdur, R.mipmap.megawati, R.mipmap.sby, R.mipmap.jokowi)
+
+    override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
+        var inflater = context.layoutInflater
+        var view1 = inflater.inflate(R.layout.data, null)
+
+        //mencari view di data
+        var nama =view1.findViewById<TextView>(R.id.nama)
+        var deskripsi =view1.findViewById<TextView>(R.id.deskripsi)
+        var gambar=view1.findViewById<ImageView>(R.id.gambar)
+
+        nama.setText(presiden[p0])
+        deskripsi.setText(desc[p0])
+        gambar.setImageResource(image[p0])
+        return view1
+    }
+
+    override fun getItem(p0: Int): Any {
+        return image[p0]
+    }
+
+    override fun getItemId(p0: Int): Long {
+        return image[p0].toLong()
+    }
+
+    override fun getCount(): Int {
+        return image.size
+    }
+
+
+}
+
+
